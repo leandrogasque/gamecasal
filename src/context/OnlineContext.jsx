@@ -109,7 +109,8 @@ export const OnlineProvider = ({ children }) => {
                 .single();
 
             if (fetchError || !data) {
-                setError("Sala não encontrada.");
+                console.error("Join Room Error:", fetchError || "Room data is null");
+                setError("Sala não encontrada (Verifique o código).");
                 return false;
             }
 

@@ -25,8 +25,10 @@ export const LobbyScreen = () => {
         if (!myNickname) return alert('Digite seu nome!');
         setLoading(true);
         setPlayerNames(prev => ({ ...prev, 1: myNickname }));
-        await createRoom();
-        setMode('waiting');
+        const code = await createRoom();
+        if (code) {
+            setMode('waiting');
+        }
         setLoading(false);
     };
 
@@ -35,7 +37,8 @@ export const LobbyScreen = () => {
         if (!myNickname) return alert('Digite seu nome!');
         setLoading(true);
         setPlayerNames(prev => ({ ...prev, 2: myNickname }));
-        const success = await joinRoom(inputCode.toUpperCase());
+        const cleanCode = inputCode.trim().toUpperCase();
+        const success = await joinRoom(cleanCode);
         if (success) {
             // Sync my name to the host
             // Need to call a sync function in OnlineContext or just use updateOnlineGame directly
@@ -133,7 +136,7 @@ export const LobbyScreen = () => {
                             placeholder="DIGITE O CÓDIGO (6 LETRAS)"
                             className="w-full p-4 rounded-xl bg-white/10 border border-white/20 text-white text-center font-mono text-xl uppercase placeholder:text-white/30 focus:outline-none focus:border-brand-primary"
                             value={inputCode}
-                            onChange={(e) => setInputCode(e.target.value)}
+                            onChange={(e) => setInputCode(e.target.value.toUpperCase())}
                             maxLength={6}
                         />
                         {error && <p className="text-red-400 text-sm">{error}</p>}
