@@ -14,8 +14,6 @@ export const LobbyScreen = () => {
     const [mode, setMode] = useState('menu'); // menu, create, join
     const [inputCode, setInputCode] = useState('');
     const [myNickname, setMyNickname] = useState('');
-    const [inputCode, setInputCode] = useState('');
-    const [myNickname, setMyNickname] = useState('');
     const [loading, setLoading] = useState(false);
     const [showScanner, setShowScanner] = useState(false); // Toggle scanner
 
