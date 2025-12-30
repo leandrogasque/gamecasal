@@ -178,6 +178,7 @@ export const LobbyScreen = () => {
                                 onChange={(e) => setInputCode(e.target.value.toUpperCase())}
                                 maxLength={6}
                             />
+                        )}
                         {error && <p className="text-red-400 text-sm">{error}</p>}
                         <Button onClick={handleJoin} disabled={loading || inputCode.length < 6 || !myNickname} className="w-full">
                             {loading ? 'Entrando...' : 'Conectar'}
