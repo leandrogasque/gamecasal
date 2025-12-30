@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Share2, Repeat, Home } from 'lucide-react';
+import { Share2, Repeat, Home, PlayCircle } from 'lucide-react';
 import { Button } from '../components/Button';
 import { useGame } from '../context/GameContext';
 
 export const EndScreen = () => {
-    const { setGameState, favorites, sessionStats, historyStats, resetGame } = useGame();
+    const { favorites, sessionStats, historyStats, resetGame, restartGame, isHost, roomCode } = useGame();
 
     const handleShare = () => {
         const text = "Acabei de jogar *Puxa Conversa Casal* e foi incrível! ❤️\nRecomendo demais para conectar com o crush.";
@@ -63,6 +63,14 @@ export const EndScreen = () => {
                     <Share2 className="w-4 h-4" />
                     <span>Compartilhar</span>
                 </Button>
+
+                {/* Show Restart only for Host or Offline */}
+                {(!roomCode || isHost) && (
+                    <Button onClick={restartGame} className="w-full flex items-center justify-center space-x-2 animate-pulse">
+                        <PlayCircle className="w-4 h-4" />
+                        <span>Jogar Novamente</span>
+                    </Button>
+                )}
 
                 <div className="flex space-x-3 mt-4">
                     <Button onClick={resetGame} variant="outline" className="flex-1 flex items-center justify-center space-x-2">

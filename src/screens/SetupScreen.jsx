@@ -14,9 +14,20 @@ const CATEGORIES = [
 ];
 
 export const SetupScreen = () => {
-    const { startGame, setGameState, playerNames, setPlayerNames } = useGame();
+    const { startGame, setGameState, playerNames, setPlayerNames, isHost, roomCode } = useGame();
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [count, setCount] = useState(10);
+
+    // If online guest, show waiting screen
+    if (roomCode && !isHost) {
+        return (
+            <div className="flex flex-col items-center justify-center h-full text-center space-y-6">
+                <div className="w-16 h-16 border-4 border-rose-200 border-t-brand-primary rounded-full animate-spin" />
+                <h2 className="text-2xl font-serif text-white">Aguardando Anfitrião</h2>
+                <p className="text-white/60">O anfitrião está configurando a próxima rodada...</p>
+            </div>
+        );
+    }
 
     const toggleCat = (id) => {
         setSelectedCategories(prev =>

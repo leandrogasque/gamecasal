@@ -148,7 +148,8 @@ export const GameProvider = ({ children }) => {
             updateOnlineGame({
                 currentCardIndex: nextIndex,
                 currentPlayer: nextPlayer,
-                isRevealed: false
+                isRevealed: false,
+                status: nextState // Send 'finished' status
             });
         }
     };
@@ -169,6 +170,23 @@ export const GameProvider = ({ children }) => {
         setGameState('home');
         setDeck([]);
         setIsRevealed(false);
+        if (roomCode) {
+            // If exiting completely, maybe leave room? 
+            // For key 'Início', simpler to just go home locally. 
+            // But if online, maybe should inform others?
+        }
+    };
+
+    const restartGame = () => {
+        // Go back to setup, keeping connection
+        setGameState('setup');
+        if (roomCode && isHost) {
+            updateOnlineGame({
+                status: 'setup',
+                currentCardIndex: 0,
+                deckIDs: null // Clear deck
+            });
+        }
     };
 
     const revealCard = () => {
@@ -196,7 +214,10 @@ export const GameProvider = ({ children }) => {
             playerNames,
             setPlayerNames,
             sessionStats,
-            historyStats
+            historyStats,
+            restartGame,
+            isHost, // Expose isHost
+            roomCode // Expose roomCode
         }}>
             {children}
         </GameContext.Provider>
