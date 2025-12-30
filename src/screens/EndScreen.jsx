@@ -3,9 +3,20 @@ import { motion } from 'framer-motion';
 import { Share2, Repeat, Home, PlayCircle } from 'lucide-react';
 import { Button } from '../components/Button';
 import { useGame } from '../context/GameContext';
+import { endContent } from '../data/endContent';
+import { RefreshCw } from 'lucide-react';
 
 export const EndScreen = () => {
     const { favorites, sessionStats, historyStats, resetGame, restartGame, isHost, roomCode } = useGame();
+
+    // Pick random items only once on mount
+    const [quote] = React.useState(() => endContent.quotes[Math.floor(Math.random() * endContent.quotes.length)]);
+    const [challenge, setChallenge] = React.useState(() => endContent.challenges[Math.floor(Math.random() * endContent.challenges.length)]);
+
+    const nextChallenge = () => {
+        const remaining = endContent.challenges.filter(c => c.text !== challenge.text);
+        setChallenge(remaining[Math.floor(Math.random() * remaining.length)]);
+    };
 
     const handleShare = () => {
         const text = "Acabei de jogar *Puxa Conversa Casal* e foi incrível! ❤️\nRecomendo demais para conectar com o crush.";
@@ -21,8 +32,8 @@ export const EndScreen = () => {
                 className="space-y-6"
             >
                 <h2 className="text-4xl font-serif text-white">Fim da Rodada!</h2>
-                <p className="text-white/70 max-w-xs mx-auto text-lg leading-relaxed">
-                    "O amor não consiste em olhar um para o outro, mas sim em olhar juntos para a mesma direção."
+                <p className="text-white/70 max-w-xs mx-auto text-lg italic leading-relaxed px-4">
+                    "{quote}"
                 </p>
                 <div className="h-px w-20 bg-white/20 mx-auto my-6" />
 
@@ -43,14 +54,22 @@ export const EndScreen = () => {
                     </div>
                 </div>
 
-                {favorites.length > 0 && (
-                    <div className="bg-white/10 p-6 rounded-2xl w-full border border-white/10">
-                        <h3 className="text-rose-200 font-bold uppercase tracking-wider text-sm mb-4">Desafio Final</h3>
-                        <p className="text-white text-lg font-serif">
-                            Dêem um abraço de 1 minuto em silêncio agora. ❤️
-                        </p>
-                    </div>
-                )}
+                <div className="bg-white/10 p-6 rounded-2xl w-full border border-white/10 relative group">
+                    <h3 className="text-rose-200 font-bold uppercase tracking-wider text-sm mb-4">Desafio Final</h3>
+                    <p className="text-white text-lg font-serif mb-4">
+                        {challenge.text}
+                    </p>
+                    <button
+                        onClick={nextChallenge}
+                        className="absolute top-4 right-4 text-white/20 hover:text-white/60 transition-colors"
+                        title="Trocar desafio"
+                    >
+                        <RefreshCw className="w-4 h-4" />
+                    </button>
+                    <span className="text-[10px] uppercase tracking-[0.2em] text-rose-400 font-bold bg-rose-900/40 px-3 py-1 rounded-full border border-rose-500/30">
+                        Nível: {challenge.intensity}
+                    </span>
+                </div>
             </motion.div>
 
             <motion.div
