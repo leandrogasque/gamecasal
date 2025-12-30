@@ -40,6 +40,9 @@ export const GameScreen = () => {
         }
     }, [intimacyLevel]);
 
+    const isFavorite = favorites.some(f => f.id === currentCard?.id);
+    const isLoading = gameState === 'playing' && deck.length === 0;
+
     if (isLoading) {
         return (
             <div className="flex flex-col h-full items-center justify-center space-y-4">
