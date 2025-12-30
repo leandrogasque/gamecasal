@@ -1,0 +1,502 @@
+[
+    {
+        "id": 1,
+        "category": "leve",
+        "text": "Qual foi a primeira impressão que você teve de mim?"
+    },
+    {
+        "id": 2,
+        "category": "leve",
+        "text": "Se pudéssemos viajar para qualquer lugar agora, para onde iríamos?"
+    },
+    {
+        "id": 3,
+        "category": "leve",
+        "text": "Qual o filme que você mais assistiu na vida?"
+    },
+    {
+        "id": 4,
+        "category": "leve",
+        "text": "Qual a minha mania que você acha mais engraçada?"
+    },
+    {
+        "id": 5,
+        "category": "leve",
+        "text": "Se ganhássemos na loteria hoje, qual a primeira coisa que você compraria?"
+    },
+    {
+        "id": 6,
+        "category": "leve",
+        "text": "Qual foi o nosso encontro mais divertido até hoje?"
+    },
+    {
+        "id": 7,
+        "category": "leve",
+        "text": "Qual comida você poderia comer todos os dias sem enjoar?"
+    },
+    {
+        "id": 8,
+        "category": "leve",
+        "text": "Se fôssemos personagens de uma série, qual seria?"
+    },
+    {
+        "id": 9,
+        "category": "leve",
+        "text": "O que você faria se tivesse um dia inteiro livre sozinho(a)?"
+    },
+    {
+        "id": 10,
+        "category": "leve",
+        "text": "Qual música sempre te faz lembrar de mim?"
+    },
+    {
+        "id": 11,
+        "category": "leve",
+        "text": "Qual foi o presente mais estranho que você já recebeu?"
+    },
+    {
+        "id": 12,
+        "category": "leve",
+        "text": "Se pudesse ter um superpoder, qual seria?"
+    },
+    {
+        "id": 13,
+        "category": "leve",
+        "text": "Qual a sua sobremesa favorita no mundo todo?"
+    },
+    {
+        "id": 14,
+        "category": "leve",
+        "text": "O que você mais gosta de fazer num domingo de chuva?"
+    },
+    {
+        "id": 15,
+        "category": "leve",
+        "text": "Qual foi o maior mico que já passamos juntos?"
+    },
+    {
+        "id": 16,
+        "category": "leve",
+        "text": "Se pudesse jantar com qualquer pessoa famosa, quem seria?"
+    },
+    {
+        "id": 17,
+        "category": "leve",
+        "text": "Qual peça de roupa minha você mais gosta?"
+    },
+    {
+        "id": 18,
+        "category": "leve",
+        "text": "O que te faz rir incontrolavelmente?"
+    },
+    {
+        "id": 19,
+        "category": "leve",
+        "text": "Qual seria o nome da nossa banda?"
+    },
+    {
+        "id": 20,
+        "category": "leve",
+        "text": "Qual a melhor festa que já fomos?"
+    },
+    {
+        "id": 21,
+        "category": "emocional",
+        "text": "Em que momento você se sentiu mais amado(a) por mim?"
+    },
+    {
+        "id": 22,
+        "category": "emocional",
+        "text": "Qual é a sua lembrança mais feliz da sua infância?"
+    },
+    {
+        "id": 23,
+        "category": "emocional",
+        "text": "Qual o maior desafio que já superamos juntos?"
+    },
+    {
+        "id": 24,
+        "category": "emocional",
+        "text": "Quando você percebeu que estava apaixonado(a) por mim?"
+    },
+    {
+        "id": 25,
+        "category": "emocional",
+        "text": "O que você aprendeu sobre amor comigo?"
+    },
+    {
+        "id": 26,
+        "category": "emocional",
+        "text": "Qual elogio meu você mais gosta de ouvir?"
+    },
+    {
+        "id": 27,
+        "category": "emocional",
+        "text": "O que eu faço que te deixa mais seguro(a)?"
+    },
+    {
+        "id": 28,
+        "category": "emocional",
+        "text": "Qual a maior qualidade que você admira em mim?"
+    },
+    {
+        "id": 29,
+        "category": "emocional",
+        "text": "Existe algo que você gostaria de me dizer, mas tem receio?"
+    },
+    {
+        "id": 30,
+        "category": "emocional",
+        "text": "Qual momento nosso você gostaria de reviver?"
+    },
+    {
+        "id": 31,
+        "category": "emocional",
+        "text": "Como eu te ajudo a ser uma pessoa melhor?"
+    },
+    {
+        "id": 32,
+        "category": "emocional",
+        "text": "O que te faz sentir mais orgulho de nós?"
+    },
+    {
+        "id": 33,
+        "category": "emocional",
+        "text": "Qual foi o dia mais difícil da sua vida e como lidou com isso?"
+    },
+    {
+        "id": 34,
+        "category": "emocional",
+        "text": "O que significa 'intimidade' para você além do sexo?"
+    },
+    {
+        "id": 35,
+        "category": "emocional",
+        "text": "Como você descreveria nosso amor em uma palavra?"
+    },
+    {
+        "id": 36,
+        "category": "emocional",
+        "text": "O que te conforta quando você está triste?"
+    },
+    {
+        "id": 37,
+        "category": "emocional",
+        "text": "Qual medo você superou recentemente?"
+    },
+    {
+        "id": 38,
+        "category": "emocional",
+        "text": "O que você considera 'imperdoável' em um relacionamento?"
+    },
+    {
+        "id": 39,
+        "category": "emocional",
+        "text": "Qual a sua linguagem do amor principal?"
+    },
+    {
+        "id": 40,
+        "category": "emocional",
+        "text": "Quando você olha para mim, o que você vê?"
+    },
+    {
+        "id": 41,
+        "category": "picante",
+        "text": "Qual parte do meu corpo você mais gosta de tocar?"
+    },
+    {
+        "id": 42,
+        "category": "picante",
+        "text": "Qual foi a melhor transa que já tivemos?"
+    },
+    {
+        "id": 43,
+        "category": "picante",
+        "text": "O que eu faço na cama que te deixa louco(a)?"
+    },
+    {
+        "id": 44,
+        "category": "picante",
+        "text": "Tem alguma fantasia que você nunca me contou?"
+    },
+    {
+        "id": 45,
+        "category": "picante",
+        "text": "Qual lugar inusitado você gostaria de fazer amor?"
+    },
+    {
+        "id": 46,
+        "category": "picante",
+        "text": "Se pudesse me pedir qualquer coisa agora, o que seria?"
+    },
+    {
+        "id": 47,
+        "category": "picante",
+        "text": "Qual tipo de lingerie/roupa você acha mais sexy em mim?"
+    },
+    {
+        "id": 48,
+        "category": "picante",
+        "text": "Gosta quando eu tomo a iniciativa ou prefere comandar?"
+    },
+    {
+        "id": 49,
+        "category": "picante",
+        "text": "Qual beijo meu é o seu favorito?"
+    },
+    {
+        "id": 50,
+        "category": "picante",
+        "text": "O que te excita instantaneamente?"
+    },
+    {
+        "id": 51,
+        "category": "picante",
+        "text": "Luz acesa, meia-luz ou escuro total?"
+    },
+    {
+        "id": 52,
+        "category": "picante",
+        "text": "Qual foi o sonho mais erótico que já teve comigo?"
+    },
+    {
+        "id": 53,
+        "category": "picante",
+        "text": "Massagem ou carícias leves antes do sexo?"
+    },
+    {
+        "id": 54,
+        "category": "picante",
+        "text": "Qual som ou palavra minha te dá arrepios?"
+    },
+    {
+        "id": 55,
+        "category": "picante",
+        "text": "Faria um vídeo nosso? Por que?"
+    },
+    {
+        "id": 56,
+        "category": "picante",
+        "text": "O que acha de usar brinquedos ou acessórios?"
+    },
+    {
+        "id": 57,
+        "category": "picante",
+        "text": "Qual a posição que te dá mais prazer?"
+    },
+    {
+        "id": 58,
+        "category": "picante",
+        "text": "Você prefere sexo rápido e intenso ou lento e romântico?"
+    },
+    {
+        "id": 59,
+        "category": "picante",
+        "text": "O que eu poderia fazer para apimentar mais nossa relação?"
+    },
+    {
+        "id": 60,
+        "category": "picante",
+        "text": "Descreva o que você faria comigo se estivéssemos sozinhos agora."
+    },
+    {
+        "id": 61,
+        "category": "futuro",
+        "text": "Onde você se vê vivendo daqui a 10 anos?"
+    },
+    {
+        "id": 62,
+        "category": "futuro",
+        "text": "Qual sonho ainda não realizamos que é prioridade para você?"
+    },
+    {
+        "id": 63,
+        "category": "futuro",
+        "text": "Como você imagina nossa velhice juntos?"
+    },
+    {
+        "id": 64,
+        "category": "futuro",
+        "text": "Ter filhos (ou mais filhos) está nos seus planos? Como seria?"
+    },
+    {
+        "id": 65,
+        "category": "futuro",
+        "text": "Qual viagem internacional precisamos fazer antes de morrer?"
+    },
+    {
+        "id": 66,
+        "category": "futuro",
+        "text": "O que precisamos melhorar financeiramente para ter a vida que queremos?"
+    },
+    {
+        "id": 67,
+        "category": "futuro",
+        "text": "Qual hobby você gostaria de começar no próximo ano?"
+    },
+    {
+        "id": 68,
+        "category": "futuro",
+        "text": "Qual legado você quer deixar para o mundo?"
+    },
+    {
+        "id": 69,
+        "category": "futuro",
+        "text": "Se pudéssemos mudar de carreira hoje, o que você faria?"
+    },
+    {
+        "id": 70,
+        "category": "futuro",
+        "text": "O que você quer estar fazendo quando se aposentar?"
+    },
+    {
+        "id": 71,
+        "category": "futuro",
+        "text": "Qual tradição gostaria de criar para nossa família?"
+    },
+    {
+        "id": 72,
+        "category": "futuro",
+        "text": "O que falta para nossa casa ser perfeita?"
+    },
+    {
+        "id": 73,
+        "category": "futuro",
+        "text": "Qual meta pessoal você quer atingir este ano?"
+    },
+    {
+        "id": 74,
+        "category": "futuro",
+        "text": "Como podemos cuidar melhor da nossa saúde a longo prazo?"
+    },
+    {
+        "id": 75,
+        "category": "futuro",
+        "text": "O que você acha que mudará em nós com o tempo?"
+    },
+    {
+        "id": 76,
+        "category": "futuro",
+        "text": "Qual habilidade nova você quer aprender?"
+    },
+    {
+        "id": 77,
+        "category": "futuro",
+        "text": "Se ganhássemos tempo livre extra, como usaríamos?"
+    },
+    {
+        "id": 78,
+        "category": "futuro",
+        "text": "O que você faria se não tivesse medo de falhar?"
+    },
+    {
+        "id": 79,
+        "category": "futuro",
+        "text": "Como você quer ser lembrado pelas pessoas?"
+    },
+    {
+        "id": 80,
+        "category": "futuro",
+        "text": "O que é 'sucesso' para você hoje?"
+    },
+    {
+        "id": 81,
+        "category": "reflexao",
+        "text": "Se pudesse mudar algo no seu passado, o que seria?"
+    },
+    {
+        "id": 82,
+        "category": "reflexao",
+        "text": "O que você mais valoriza em uma amizade?"
+    },
+    {
+        "id": 83,
+        "category": "reflexao",
+        "text": "Qual o maior arrependimento da sua vida?"
+    },
+    {
+        "id": 84,
+        "category": "reflexao",
+        "text": "Você se considera uma pessoa espiritualizada?"
+    },
+    {
+        "id": 85,
+        "category": "reflexao",
+        "text": "O que te deixa mais irritado com o mundo atual?"
+    },
+    {
+        "id": 86,
+        "category": "reflexao",
+        "text": "Qual conselho você daria para o seu 'eu' de 15 anos?"
+    },
+    {
+        "id": 87,
+        "category": "reflexao",
+        "text": "O que é imperdoável para você?"
+    },
+    {
+        "id": 88,
+        "category": "reflexao",
+        "text": "Qual sua opinião sobre 'amor eterno'?"
+    },
+    {
+        "id": 89,
+        "category": "reflexao",
+        "text": "O que te faz sentir gratidão hoje?"
+    },
+    {
+        "id": 90,
+        "category": "reflexao",
+        "text": "Você acredita em destino ou livre arbítrio?"
+    },
+    {
+        "id": 91,
+        "category": "reflexao",
+        "text": "O que tira a sua paz interior?"
+    },
+    {
+        "id": 92,
+        "category": "reflexao",
+        "text": "Qual a lição mais dura que a vida te ensinou?"
+    },
+    {
+        "id": 93,
+        "category": "reflexao",
+        "text": "Se dinheiro não existisse, como você gastaria seu tempo?"
+    },
+    {
+        "id": 94,
+        "category": "reflexao",
+        "text": "O que você mudaria na sua personalidade se pudesse?"
+    },
+    {
+        "id": 95,
+        "category": "reflexao",
+        "text": "Qual o sentido da vida para você?"
+    },
+    {
+        "id": 96,
+        "category": "reflexao",
+        "text": "Você se acha uma pessoa fácil de conviver? Por que?"
+    },
+    {
+        "id": 97,
+        "category": "reflexao",
+        "text": "O que você faria se tivesse apenas um ano de vida?"
+    },
+    {
+        "id": 98,
+        "category": "reflexao",
+        "text": "Qual causa social você defenderia com unhas e dentes?"
+    },
+    {
+        "id": 99,
+        "category": "reflexao",
+        "text": "O que é felicidade genuína para você?"
+    },
+    {
+        "id": 100,
+        "category": "reflexao",
+        "text": "Qual sua maior dúvida sobre o universo?"
+    }
+]
