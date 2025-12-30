@@ -33,6 +33,8 @@ export const GameProvider = ({ children }) => {
     }, [profile, playerNames]);
     const [endQuoteIndex, setEndQuoteIndex] = useState(0);
     const [endChallengeIndex, setEndChallengeIndex] = useState(0);
+    const [gameMode, setGameMode] = useState('custom'); // custom, progressive
+    const [intimacyLevel, setIntimacyLevel] = useState(1);
 
     // Analytics
     const [sessionStats, setSessionStats] = useState({ cardsPlayed: 0, likesGiven: 0 });
@@ -91,6 +93,12 @@ export const GameProvider = ({ children }) => {
             if (onlineState.endChallengeIndex !== undefined && onlineState.endChallengeIndex !== endChallengeIndex) {
                 setEndChallengeIndex(onlineState.endChallengeIndex);
             }
+            if (onlineState.gameMode !== undefined && onlineState.gameMode !== gameMode) {
+                setGameMode(onlineState.gameMode);
+            }
+            if (onlineState.intimacyLevel !== undefined && onlineState.intimacyLevel !== intimacyLevel) {
+                setIntimacyLevel(onlineState.intimacyLevel);
+            }
 
             // 3. Sync Deck (Guest receives deck from Host)
             if (!isHost && onlineState.deckIDs && deck.length === 0) {
@@ -114,17 +122,22 @@ export const GameProvider = ({ children }) => {
 
     const startGame = (settings) => {
         let gameDeck = [];
-
-        // If local or Host, we generate the deck
         setGameSettings(settings);
 
-        let filtered = questionsData.filter(q => settings.categories.includes(q.category));
-
-        if (settings.randomize) {
-            filtered = filtered.sort(() => Math.random() - 0.5);
+        if (settings.mode === 'progressive') {
+            setGameMode('progressive');
+            setIntimacyLevel(1);
+            // Level 1 questions: only 'leve'
+            let filtered = questionsData.filter(q => q.category === 'leve');
+            gameDeck = filtered.sort(() => Math.random() - 0.5).slice(0, 10);
+        } else {
+            setGameMode('custom');
+            let filtered = questionsData.filter(q => settings.categories.includes(q.category));
+            if (settings.randomize) {
+                filtered = filtered.sort(() => Math.random() - 0.5);
+            }
+            gameDeck = filtered.slice(0, settings.questionCount);
         }
-
-        gameDeck = filtered.slice(0, settings.questionCount);
 
         setDeck(gameDeck);
         setCurrentCardIndex(0);
@@ -138,8 +151,10 @@ export const GameProvider = ({ children }) => {
                 currentCardIndex: 0,
                 currentPlayer: 1,
                 isRevealed: false,
-                playerNames: playerNames, // Sync initial names
-                deckIDs: gameDeck.map(q => q.id) // Send only IDs to save bandwidth
+                playerNames: playerNames,
+                deckIDs: gameDeck.map(q => q.id),
+                gameMode: settings.mode || 'custom',
+                intimacyLevel: 1
             });
         }
     };
@@ -217,11 +232,13 @@ export const GameProvider = ({ children }) => {
     const restartGame = () => {
         // Go back to setup, keeping connection
         setGameState('setup');
+        setIntimacyLevel(1); // Reset level on restart
         if (roomCode && isHost) {
             updateOnlineGame({
                 status: 'setup',
                 currentCardIndex: 0,
-                deckIDs: null // Clear deck
+                deckIDs: null, // Clear deck
+                intimacyLevel: 1
             });
         }
     };
@@ -238,6 +255,32 @@ export const GameProvider = ({ children }) => {
         setEndChallengeIndex(nextIdx);
         if (roomCode && isHost) {
             updateOnlineGame({ endChallengeIndex: nextIdx });
+        }
+    };
+
+    const upgradeLevel = () => {
+        if (intimacyLevel >= 3) return;
+        const nextLevel = intimacyLevel + 1;
+        setIntimacyLevel(nextLevel);
+
+        // Add new questions to deck based on next level
+        let newQuestions = [];
+        if (nextLevel === 2) {
+            newQuestions = questionsData.filter(q => ['emocional', 'futuro', 'reflexao'].includes(q.category));
+        } else if (nextLevel === 3) {
+            newQuestions = questionsData.filter(q => q.category === 'picante');
+        }
+
+        // Shuffle and take 10 new questions to append
+        const shuffled = newQuestions.sort(() => Math.random() - 0.5).slice(0, 10);
+        const updatedDeck = [...deck, ...shuffled];
+        setDeck(updatedDeck);
+
+        if (roomCode && isHost) {
+            updateOnlineGame({
+                intimacyLevel: nextLevel,
+                deckIDs: updatedDeck.map(q => q.id)
+            });
         }
     };
 
@@ -265,7 +308,11 @@ export const GameProvider = ({ children }) => {
             roomCode, // Expose roomCode
             endQuoteIndex,
             endChallengeIndex,
-            refreshChallenge
+            refreshChallenge,
+            gameMode,
+            setGameMode,
+            intimacyLevel,
+            upgradeLevel
         }}>
             {children}
         </GameContext.Provider>

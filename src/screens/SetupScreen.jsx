@@ -14,20 +14,9 @@ const CATEGORIES = [
 ];
 
 export const SetupScreen = () => {
-    const { startGame, setGameState, playerNames, setPlayerNames, isHost, roomCode } = useGame();
-    const [selectedCategories, setSelectedCategories] = useState([]);
+    const { startGame, setGameState, playerNames, setPlayerNames, isHost, roomCode, gameMode, setGameMode } = useGame();
+    const [selectedCategories, setSelectedCategories] = useState(['leve']);
     const [count, setCount] = useState(10);
-
-    // If online guest, show waiting screen
-    if (roomCode && !isHost) {
-        return (
-            <div className="flex flex-col items-center justify-center h-full text-center space-y-6">
-                <div className="w-16 h-16 border-4 border-rose-200 border-t-brand-primary rounded-full animate-spin" />
-                <h2 className="text-2xl font-serif text-white">Aguardando Anfitrião</h2>
-                <p className="text-white/60">O anfitrião está configurando a próxima rodada...</p>
-            </div>
-        );
-    }
 
     const toggleCat = (id) => {
         setSelectedCategories(prev =>
@@ -36,8 +25,9 @@ export const SetupScreen = () => {
     };
 
     const handleStart = () => {
-        if (selectedCategories.length === 0) return;
+        if (gameMode === 'custom' && selectedCategories.length === 0) return;
         startGame({
+            mode: gameMode,
             categories: selectedCategories,
             questionCount: count,
             randomize: true
@@ -56,9 +46,42 @@ export const SetupScreen = () => {
                 </button>
                 <h2 className="text-3xl font-serif text-white mb-2">Personalizar</h2>
             </div>
-            <p className="text-white/60 mb-8">Defina os nomes e o clima do jogo</p>
 
-            <div className="w-full space-y-6 flex-1 overflow-y-auto pb-8">
+            {/* Game Mode Selector */}
+            <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10">
+                <button
+                    onClick={() => setGameMode('progressive')}
+                    className={cn(
+                        "flex-1 py-3 px-4 rounded-xl text-sm font-bold uppercase tracking-wider transition-all",
+                        gameMode === 'progressive' ? "bg-rose-500 text-white shadow-lg" : "text-white/40 hover:text-white/60"
+                    )}
+                >
+                    Modo Progressivo
+                </button>
+                <button
+                    onClick={() => setGameMode('custom')}
+                    className={cn(
+                        "flex-1 py-3 px-4 rounded-xl text-sm font-bold uppercase tracking-wider transition-all",
+                        gameMode === 'custom' ? "bg-rose-500 text-white shadow-lg" : "text-white/40 hover:text-white/60"
+                    )}
+                >
+                    Modo Manual
+                </button>
+            </div>
+
+            {gameMode === 'progressive' ? (
+                <div className="p-6 bg-rose-500/10 rounded-2xl border border-rose-500/20 text-center space-y-4">
+                    <Sparkles className="w-10 h-10 text-rose-300 mx-auto" />
+                    <h3 className="text-xl font-serif text-white">Modo Progressivo</h3>
+                    <p className="text-white/60 text-sm leading-relaxed">
+                        O jogo começa leve e aumenta a intensidade gradualmente. Ideal para quem quer uma experiência guiada.
+                    </p>
+                </div>
+            ) : (
+                <p className="text-white/60">Escolha as categorias para sua rodada personalizada</p>
+            )}
+
+            <div className="w-full space-y-6 flex-1 overflow-y-auto pb-8 pr-1 custom-scrollbar">
 
                 {/* Name Inputs */}
                 <div className="space-y-3">
@@ -91,56 +114,60 @@ export const SetupScreen = () => {
                     </div>
                 </div>
 
-                {/* Categories */}
-                <section className="space-y-4">
-                    <label className="text-sm font-bold tracking-widest text-white/50 uppercase">Categorias</label>
-                    <div className="grid grid-cols-1 gap-3">
-                        {CATEGORIES.map((cat) => (
-                            <button
-                                key={cat.id}
-                                onClick={() => toggleCat(cat.id)}
-                                className={cn(
-                                    "flex items-center justify-between p-4 rounded-xl border transition-all duration-200",
-                                    selectedCategories.includes(cat.id)
-                                        ? "bg-white/10 border-white/50 text-white"
-                                        : "bg-transparent border-white/10 text-white/40"
-                                )}
-                            >
-                                <span className="font-medium text-lg">{cat.label}</span>
-                                {selectedCategories.includes(cat.id) && (
-                                    <div className="w-6 h-6 rounded-full bg-white text-brand-primary flex items-center justify-center">
-                                        <Check className="w-4 h-4" />
-                                    </div>
-                                )}
-                            </button>
-                        ))}
-                    </div>
-                </section>
+                {gameMode === 'custom' && (
+                    <>
+                        {/* Categories */}
+                        <section className="space-y-4">
+                            <label className="text-sm font-bold tracking-widest text-white/50 uppercase">Categorias</label>
+                            <div className="grid grid-cols-1 gap-3">
+                                {CATEGORIES.map((cat) => (
+                                    <button
+                                        key={cat.id}
+                                        onClick={() => toggleCat(cat.id)}
+                                        className={cn(
+                                            "flex items-center justify-between p-4 rounded-xl border transition-all duration-200",
+                                            selectedCategories.includes(cat.id)
+                                                ? "bg-white/10 border-white/50 text-white"
+                                                : "bg-transparent border-white/10 text-white/40"
+                                        )}
+                                    >
+                                        <span className="font-medium text-lg">{cat.label}</span>
+                                        {selectedCategories.includes(cat.id) && (
+                                            <div className="w-6 h-6 rounded-full bg-white text-brand-primary flex items-center justify-center">
+                                                <Check className="w-4 h-4" />
+                                            </div>
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                        </section>
 
-                {/* Count */}
-                <section className="space-y-4">
-                    <label className="text-sm font-bold tracking-widest text-white/50 uppercase">Quantidade de Cartas</label>
-                    <div className="grid grid-cols-3 gap-3">
-                        {[10, 20, 50].map((num) => (
-                            <button
-                                key={num}
-                                onClick={() => setCount(num)}
-                                className={cn(
-                                    "p-3 rounded-xl border font-bold text-lg transition-all",
-                                    count === num
-                                        ? "bg-white text-brand-dark border-white"
-                                        : "bg-transparent text-white/50 border-white/10"
-                                )}
-                            >
-                                {num}
-                            </button>
-                        ))}
-                    </div>
-                </section>
+                        {/* Count */}
+                        <section className="space-y-4">
+                            <label className="text-sm font-bold tracking-widest text-white/50 uppercase">Quantidade de Cartas</label>
+                            <div className="grid grid-cols-3 gap-3">
+                                {[10, 20, 50].map((num) => (
+                                    <button
+                                        key={num}
+                                        onClick={() => setCount(num)}
+                                        className={cn(
+                                            "p-3 rounded-xl border font-bold text-lg transition-all",
+                                            count === num
+                                                ? "bg-white text-brand-dark border-white"
+                                                : "bg-transparent text-white/50 border-white/10"
+                                        )}
+                                    >
+                                        {num}
+                                    </button>
+                                ))}
+                            </div>
+                        </section>
+                    </>
+                )}
             </div>
 
             <div className="pt-4">
-                <Button onClick={handleStart} className="w-full" disabled={selectedCategories.length === 0}>
+                <Button onClick={handleStart} className="w-full" disabled={gameMode === 'custom' && selectedCategories.length === 0}>
                     Começar Jogo
                 </Button>
             </div>
