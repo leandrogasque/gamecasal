@@ -61,16 +61,24 @@ export const GameProvider = ({ children }) => {
             }
 
             // 2. Sync Card Index & Player Turn
-            if (onlineState.currentCardIndex !== undefined) setCurrentCardIndex(onlineState.currentCardIndex);
-            if (onlineState.currentPlayer !== undefined) setCurrentPlayer(onlineState.currentPlayer);
-            if (onlineState.isRevealed !== undefined) setIsRevealed(onlineState.isRevealed);
-            if (onlineState.playerNames !== undefined) setPlayerNames(onlineState.playerNames);
+            if (onlineState.currentCardIndex !== undefined && onlineState.currentCardIndex !== currentCardIndex) {
+                setCurrentCardIndex(onlineState.currentCardIndex);
+            }
+            if (onlineState.currentPlayer !== undefined && onlineState.currentPlayer !== currentPlayer) {
+                setCurrentPlayer(onlineState.currentPlayer);
+            }
+            if (onlineState.isRevealed !== undefined && onlineState.isRevealed !== isRevealed) {
+                setIsRevealed(onlineState.isRevealed);
+            }
+            if (onlineState.playerNames && JSON.stringify(onlineState.playerNames) !== JSON.stringify(playerNames)) {
+                setPlayerNames(onlineState.playerNames);
+            }
 
             // 3. Sync Deck (Guest receives deck from Host)
-            // If we are guest (not host) and we receive a deckIDs array, reconstruct the deck
             if (!isHost && onlineState.deckIDs && deck.length === 0) {
                 const newDeck = onlineState.deckIDs.map(id => questionsData.find(q => q.id === id)).filter(Boolean);
-                setDeck(newDeck);
+                // Simple length check to avoid re-setting identical deck, ideally check IDs
+                if (newDeck.length > 0) setDeck(newDeck);
             }
         }
     }, [onlineState, roomCode, isHost, gameState]); // Added necessary deps
