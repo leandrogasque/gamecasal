@@ -3,7 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useOnline } from '../context/OnlineContext';
 import { useGame } from '../context/GameContext';
 import { Button } from '../components/Button';
-import { ArrowLeft, Copy, Users, User } from 'lucide-react';
+import { ArrowLeft, Copy, Users, User, QrCode, ScanLine } from 'lucide-react'; // Added icons
+import QRCode from "react-qr-code"; // Generator
+import { Html5QrcodeScanner } from "html5-qrcode"; // Scanner
 
 export const LobbyScreen = () => {
     const { createRoom, joinRoom, roomCode, isHost, playerCount, error, updateOnlineGame } = useOnline();
@@ -12,7 +14,10 @@ export const LobbyScreen = () => {
     const [mode, setMode] = useState('menu'); // menu, create, join
     const [inputCode, setInputCode] = useState('');
     const [myNickname, setMyNickname] = useState('');
+    const [inputCode, setInputCode] = useState('');
+    const [myNickname, setMyNickname] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showScanner, setShowScanner] = useState(false); // Toggle scanner
 
     useEffect(() => {
         if (playerCount === 2 && roomCode) {
@@ -53,6 +58,27 @@ export const LobbyScreen = () => {
         }
         setLoading(false);
     };
+
+    useEffect(() => {
+        if (showScanner) {
+            const scanner = new Html5QrcodeScanner(
+                "reader",
+                { fps: 10, qrbox: { width: 250, height: 250 } },
+                false // verbose
+            );
+            scanner.render(
+                (decodedText) => {
+                    scanner.clear();
+                    setShowScanner(false);
+                    setInputCode(decodedText.trim().toUpperCase());
+                },
+                (error) => {
+                    // console.warn(error);
+                }
+            );
+            return () => scanner.clear();
+        }
+    }, [showScanner]);
 
     // Sync P2 Name when joined
     useEffect(() => {
@@ -131,14 +157,29 @@ export const LobbyScreen = () => {
                             />
                         </div>
 
-                        <input
-                            type="text"
-                            placeholder="DIGITE O CÓDIGO (6 LETRAS)"
-                            className="w-full p-4 rounded-xl bg-white/10 border border-white/20 text-white text-center font-mono text-xl uppercase placeholder:text-white/30 focus:outline-none focus:border-brand-primary"
-                            value={inputCode}
-                            onChange={(e) => setInputCode(e.target.value.toUpperCase())}
-                            maxLength={6}
-                        />
+                        {showScanner ? (
+                            <div className="w-full bg-black rounded-xl overflow-hidden mb-4">
+                                <div id="reader" className="w-full" />
+                                <Button variant="outline" onClick={() => setShowScanner(false)} className="w-full mt-2">
+                                    Cancelar Câmera
+                                </Button>
+                            </div>
+                        ) : (
+                            <Button variant="secondary" onClick={() => setShowScanner(true)} className="w-full flex items-center justify-center gap-2 mb-2">
+                                <ScanLine className="w-4 h-4" />
+                                <span>Escanear QR Code</span>
+                            </Button>
+                        )}
+
+                        {!showScanner && (
+                            <input
+                                type="text"
+                                placeholder="DIGITE O CÓDIGO (6 LETRAS)"
+                                className="w-full p-4 rounded-xl bg-white/10 border border-white/20 text-white text-center font-mono text-xl uppercase placeholder:text-white/30 focus:outline-none focus:border-brand-primary"
+                                value={inputCode}
+                                onChange={(e) => setInputCode(e.target.value.toUpperCase())}
+                                maxLength={6}
+                            />
                         {error && <p className="text-red-400 text-sm">{error}</p>}
                         <Button onClick={handleJoin} disabled={loading || inputCode.length < 6 || !myNickname} className="w-full">
                             {loading ? 'Entrando...' : 'Conectar'}
@@ -157,6 +198,16 @@ export const LobbyScreen = () => {
                             <span className="text-4xl font-mono font-bold text-white tracking-widest">{roomCode}</span>
                             <Copy className="w-5 h-5 text-white/50" />
                         </div>
+
+                        <div className="bg-white p-4 rounded-xl mx-auto mb-6 w-fit">
+                            <QRCode
+                                size={128}
+                                style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                                value={roomCode || ""}
+                                viewBox={`0 0 128 128`}
+                            />
+                        </div>
+                        <p className="text-white/30 text-xs mb-4">Peça para seu par escanear este código</p>
 
                         <div className="flex flex-col items-center space-y-2">
                             <Users className="w-8 h-8 text-rose-300" />
