@@ -131,9 +131,20 @@ export const LobbyScreen = () => {
                         <Button onClick={handleCreate} disabled={!myNickname} className="w-full">
                             Criar Sala
                         </Button>
-                        <Button variant="outline" onClick={() => setMode('join')} className="w-full">
-                            Entrar em Sala
-                        </Button>
+
+                        <div className="flex gap-2">
+                            <Button variant="outline" onClick={() => setMode('join')} className="flex-1">
+                                Digitar Código
+                            </Button>
+                            <Button variant="secondary" onClick={() => {
+                                if (!myNickname) return alert('Digite seu apelido primeiro!');
+                                setMode('join');
+                                setShowScanner(true);
+                            }} className="flex-1 flex items-center justify-center gap-2">
+                                <ScanLine className="w-4 h-4" />
+                                <span>Escanear QR</span>
+                            </Button>
+                        </div>
                     </motion.div>
                 )}
 
@@ -156,16 +167,16 @@ export const LobbyScreen = () => {
                         </div>
 
                         {showScanner ? (
-                            <div className="w-full bg-black rounded-xl overflow-hidden mb-4">
-                                <div id="reader" className="w-full" />
-                                <Button variant="outline" onClick={() => setShowScanner(false)} className="w-full mt-2">
+                            <div className="w-full bg-black/40 rounded-2xl overflow-hidden border border-white/20 p-2">
+                                <div id="reader" className="w-full rounded-xl overflow-hidden" />
+                                <Button variant="ghost" onClick={() => setShowScanner(false)} className="w-full mt-2 text-white/60">
                                     Cancelar Câmera
                                 </Button>
                             </div>
                         ) : (
-                            <Button variant="secondary" onClick={() => setShowScanner(true)} className="w-full flex items-center justify-center gap-2 mb-2">
+                            <Button variant="ghost" onClick={() => setShowScanner(true)} className="text-rose-200 text-sm flex items-center gap-2 mx-auto mb-2">
                                 <ScanLine className="w-4 h-4" />
-                                <span>Escanear QR Code</span>
+                                <span>Usar Câmera</span>
                             </Button>
                         )}
 
