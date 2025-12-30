@@ -10,7 +10,7 @@ export const useGame = () => useContext(GameContext);
 
 export const GameProvider = ({ children }) => {
     const { onlineState, updateOnlineGame, roomCode, isHost } = useOnline(); // Hook into online data
-    const { profile } = useUser();
+    const { profile, addGameStats } = useUser();
 
     const [gameState, setGameState] = useState('home'); // home, lobby, setup, playing, finished
     const [deck, setDeck] = useState([]);
@@ -101,10 +101,13 @@ export const GameProvider = ({ children }) => {
             }
 
             // 3. Sync Deck (Guest receives deck from Host)
-            if (!isHost && onlineState.deckIDs && deck.length === 0) {
-                const newDeck = onlineState.deckIDs.map(id => questionsData.find(q => q.id === id)).filter(Boolean);
-                // Simple length check to avoid re-setting identical deck, ideally check IDs
-                if (newDeck.length > 0) setDeck(newDeck);
+            if (!isHost && onlineState.deckIDs) {
+                const hostDeckIDs = onlineState.deckIDs;
+                const currentDeckIDs = deck.map(q => q.id);
+                if (JSON.stringify(hostDeckIDs) !== JSON.stringify(currentDeckIDs)) {
+                    const newDeck = hostDeckIDs.map(id => questionsData.find(q => q.id === id)).filter(Boolean);
+                    if (newDeck.length > 0) setDeck(newDeck);
+                }
             }
         }
     }, [onlineState, roomCode, isHost, gameState]); // Added necessary deps
@@ -171,6 +174,13 @@ export const GameProvider = ({ children }) => {
         } else {
             setGameState('finished');
             nextState = 'finished';
+
+            // Save stats to user profile
+            addGameStats({
+                cardsPlayed: sessionStats.cardsPlayed + 1, // +1 for the last card
+                likesGiven: sessionStats.likesGiven,
+                favorites: favorites
+            });
 
             // Pick end content indices when finishing
             const qIndex = Math.floor(Math.random() * endContent.quotes.length);

@@ -20,7 +20,18 @@ export const UserProvider = ({ children }) => {
                 const profileRef = ref(db, `users/${user.uid}`);
                 onValue(profileRef, (snapshot) => {
                     const data = snapshot.val();
-                    setProfile(data);
+                    setProfile(data || {
+                        nickname: 'Viajante',
+                        avatar: '✨',
+                        color: 'from-rose-500 to-pink-600',
+                        setupComplete: false,
+                        stats: {
+                            cardsPlayed: 0,
+                            likesGiven: 0,
+                            sessionsCompleted: 0
+                        },
+                        favorites: []
+                    });
                     setLoading(false);
                 });
             } else {
@@ -39,15 +50,42 @@ export const UserProvider = ({ children }) => {
 
     const updateProfile = async (data) => {
         if (!user) return;
-        await set(ref(db, `users/${user.uid}`), {
-            ...profile,
+        await update(ref(db, `users/${user.uid}`), {
             ...data,
             lastLogin: Date.now()
         });
     };
 
+    const addGameStats = async (sessionData) => {
+        if (!user || !profile) return;
+
+        const currentStats = profile.stats || { cardsPlayed: 0, likesGiven: 0, sessionsCompleted: 0 };
+        const newStats = {
+            cardsPlayed: currentStats.cardsPlayed + (sessionData.cardsPlayed || 0),
+            likesGiven: currentStats.likesGiven + (sessionData.likesGiven || 0),
+            sessionsCompleted: currentStats.sessionsCompleted + 1
+        };
+
+        // Update stats and merge favorites
+        const currentFavorites = profile.favorites || [];
+        const newFavorites = [...currentFavorites];
+
+        if (sessionData.favorites) {
+            sessionData.favorites.forEach(fav => {
+                if (!newFavorites.find(existing => existing.id === fav.id)) {
+                    newFavorites.push(fav);
+                }
+            });
+        }
+
+        await update(ref(db, `users/${user.uid}`), {
+            stats: newStats,
+            favorites: newFavorites
+        });
+    };
+
     return (
-        <UserContext.Provider value={{ user, profile, updateProfile, loading }}>
+        <UserContext.Provider value={{ user, profile, updateProfile, addGameStats, loading }}>
             {children}
         </UserContext.Provider>
     );

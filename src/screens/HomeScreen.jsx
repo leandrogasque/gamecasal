@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Settings } from 'lucide-react';
+import { Heart, Settings, Sparkles, Users } from 'lucide-react';
 import { Button } from '../components/Button';
 import { useGame } from '../context/GameContext';
 
@@ -34,11 +34,16 @@ export const HomeScreen = () => {
                 className="flex flex-col gap-4 w-full max-w-xs"
             >
                 <Button onClick={() => setGameState('setup')} className="w-full shadow-lg shadow-rose-900/40">
-                    Jogar Local (2 Pessoas)
+                    Jogar Agora
                 </Button>
-                <Button onClick={() => setGameState('lobby')} variant="secondary" className="w-full">
-                    Jogar Online
-                </Button>
+                <div className="flex gap-4">
+                    <Button onClick={() => setGameState('lobby')} variant="secondary" className="flex-1 flex items-center justify-center gap-2">
+                        <Users className="w-4 h-4" /> Online
+                    </Button>
+                    <Button onClick={() => setGameState('journey')} variant="secondary" className="flex-1 flex items-center justify-center gap-2">
+                        <Sparkles className="w-4 h-4 text-rose-300" /> Jornada
+                    </Button>
+                </div>
                 <Button variant="outline" onClick={() => alert('Configurações em breve!')} className="w-full relative">
                     <Settings className="w-4 h-4 absolute left-6 top-1/2 -translate-y-1/2 opacity-50" />
                     Configurações

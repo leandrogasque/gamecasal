@@ -6,7 +6,7 @@ import { SetupScreen } from './screens/SetupScreen';
 import { GameScreen } from './screens/GameScreen';
 import { EndScreen } from './screens/EndScreen';
 import { LobbyScreen } from './screens/LobbyScreen';
-
+import { JourneyScreen } from './screens/JourneyScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
 import { useUser } from './context/UserContext';
 
@@ -29,6 +29,7 @@ function AppContent() {
             {gameState === 'setup' && <SetupScreen />}
             {gameState === 'playing' && <GameScreen />}
             {gameState === 'finished' && <EndScreen />}
+            {gameState === 'journey' && <JourneyScreen />}
         </Layout>
     );
 }
