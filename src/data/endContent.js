@@ -41,6 +41,30 @@ export const endContent = {
         {
             text: "Escolha uma parte do corpo do seu parceiro para dar um beijo lento.",
             intensity: "picante"
+        },
+        {
+            text: "Fique cara a cara por 1 minuto, sem falar e sem desviar o olhar.",
+            intensity: "emocional"
+        },
+        {
+            text: "Dê um beijo de cinema, com direito a mão na nuca e pegada forte.",
+            intensity: "picante"
+        },
+        {
+            text: "Tire uma peça de roupa sua. Se o parceiro quiser, ele(a) pode te ajudar.",
+            intensity: "hard"
+        },
+        {
+            text: "Faça um elogio sobre algo que o parceiro faz na cama que você adora.",
+            intensity: "hard"
+        },
+        {
+            text: "Dê 5 beijos em lugares diferentes que não sejam o rosto.",
+            intensity: "picante"
+        },
+        {
+            text: "Descreva um cenário erótico que você adoraria viver com seu par agora.",
+            intensity: "hard"
         }
     ]
 };

@@ -7,16 +7,21 @@ import { endContent } from '../data/endContent';
 import { RefreshCw } from 'lucide-react';
 
 export const EndScreen = () => {
-    const { favorites, sessionStats, historyStats, resetGame, restartGame, isHost, roomCode } = useGame();
+    const {
+        favorites,
+        sessionStats,
+        historyStats,
+        resetGame,
+        restartGame,
+        isHost,
+        roomCode,
+        endQuoteIndex,
+        endChallengeIndex,
+        refreshChallenge
+    } = useGame();
 
-    // Pick random items only once on mount
-    const [quote] = React.useState(() => endContent.quotes[Math.floor(Math.random() * endContent.quotes.length)]);
-    const [challenge, setChallenge] = React.useState(() => endContent.challenges[Math.floor(Math.random() * endContent.challenges.length)]);
-
-    const nextChallenge = () => {
-        const remaining = endContent.challenges.filter(c => c.text !== challenge.text);
-        setChallenge(remaining[Math.floor(Math.random() * remaining.length)]);
-    };
+    const quote = endContent.quotes[endQuoteIndex] || endContent.quotes[0];
+    const challenge = endContent.challenges[endChallengeIndex] || endContent.challenges[0];
 
     const handleShare = () => {
         const text = "Acabei de jogar *Puxa Conversa Casal* e foi incrível! ❤️\nRecomendo demais para conectar com o crush.";
@@ -59,13 +64,15 @@ export const EndScreen = () => {
                     <p className="text-white text-lg font-serif mb-4">
                         {challenge.text}
                     </p>
-                    <button
-                        onClick={nextChallenge}
-                        className="absolute top-4 right-4 text-white/20 hover:text-white/60 transition-colors"
-                        title="Trocar desafio"
-                    >
-                        <RefreshCw className="w-4 h-4" />
-                    </button>
+                    {(!roomCode || isHost) && (
+                        <button
+                            onClick={refreshChallenge}
+                            className="absolute top-4 right-4 text-white/20 hover:text-white/60 transition-colors"
+                            title="Trocar desafio"
+                        >
+                            <RefreshCw className="w-4 h-4" />
+                        </button>
+                    )}
                     <span className="text-[10px] uppercase tracking-[0.2em] text-rose-400 font-bold bg-rose-900/40 px-3 py-1 rounded-full border border-rose-500/30">
                         Nível: {challenge.intensity}
                     </span>

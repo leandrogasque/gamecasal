@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import questionsData from '../data/questions.json';
 import { useOnline } from './OnlineContext';
+import { endContent } from '../data/endContent';
 
 const GameContext = createContext();
 
@@ -21,6 +22,8 @@ export const GameProvider = ({ children }) => {
         randomize: true
     });
     const [playerNames, setPlayerNames] = useState({ 1: 'Jogador 1', 2: 'Jogador 2' });
+    const [endQuoteIndex, setEndQuoteIndex] = useState(0);
+    const [endChallengeIndex, setEndChallengeIndex] = useState(0);
 
     // Analytics
     const [sessionStats, setSessionStats] = useState({ cardsPlayed: 0, likesGiven: 0 });
@@ -72,6 +75,12 @@ export const GameProvider = ({ children }) => {
             }
             if (onlineState.playerNames && JSON.stringify(onlineState.playerNames) !== JSON.stringify(playerNames)) {
                 setPlayerNames(onlineState.playerNames);
+            }
+            if (onlineState.endQuoteIndex !== undefined && onlineState.endQuoteIndex !== endQuoteIndex) {
+                setEndQuoteIndex(onlineState.endQuoteIndex);
+            }
+            if (onlineState.endChallengeIndex !== undefined && onlineState.endChallengeIndex !== endChallengeIndex) {
+                setEndChallengeIndex(onlineState.endChallengeIndex);
             }
 
             // 3. Sync Deck (Guest receives deck from Host)
@@ -138,6 +147,25 @@ export const GameProvider = ({ children }) => {
         } else {
             setGameState('finished');
             nextState = 'finished';
+
+            // Pick end content indices when finishing
+            const qIndex = Math.floor(Math.random() * endContent.quotes.length);
+            const cIndex = Math.floor(Math.random() * endContent.challenges.length);
+            setEndQuoteIndex(qIndex);
+            setEndChallengeIndex(cIndex);
+
+            // Sync if Online
+            if (roomCode && isHost) {
+                updateOnlineGame({
+                    status: 'finished',
+                    currentCardIndex: nextIndex,
+                    currentPlayer: nextPlayer,
+                    isRevealed: false,
+                    endQuoteIndex: qIndex,
+                    endChallengeIndex: cIndex
+                });
+                return; // Prevent second update call below
+            }
         }
 
         // Reset reveal state locally
@@ -196,6 +224,14 @@ export const GameProvider = ({ children }) => {
         }
     };
 
+    const refreshChallenge = () => {
+        const nextIdx = Math.floor(Math.random() * endContent.challenges.length);
+        setEndChallengeIndex(nextIdx);
+        if (roomCode && isHost) {
+            updateOnlineGame({ endChallengeIndex: nextIdx });
+        }
+    };
+
     return (
         <GameContext.Provider value={{
             gameState,
@@ -217,7 +253,10 @@ export const GameProvider = ({ children }) => {
             historyStats,
             restartGame,
             isHost, // Expose isHost
-            roomCode // Expose roomCode
+            roomCode, // Expose roomCode
+            endQuoteIndex,
+            endChallengeIndex,
+            refreshChallenge
         }}>
             {children}
         </GameContext.Provider>
