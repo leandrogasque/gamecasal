@@ -8,9 +8,7 @@ export const HomeScreen = () => {
     const { setGameState } = useGame();
 
     return (
-    return (
-    return (
-        <div className="flex flex-col items-center justify-start h-full py-4 text-center space-y-6 w-full overflow-y-auto no-scrollbar">
+        <div className="flex flex-col items-center justify-start h-full py-4 text-center space-y-6 w-full overflow-y-auto no-scrollbar pb-10">
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
