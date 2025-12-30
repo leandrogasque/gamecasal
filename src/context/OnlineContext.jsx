@@ -46,10 +46,11 @@ export const OnlineProvider = ({ children }) => {
         // 2. Listen for Database Changes (Game State)
         channel.on(
             'postgres_changes',
-            { event: 'UPDATE', schema: 'public', table: 'rooms', filter: `code=eq.${code}` },
+            { event: 'UPDATE', schema: 'public', table: 'rooms' },
             (payload) => {
                 const newData = payload.new;
-                if (newData) {
+                if (newData && newData.code === code) {
+                    console.log('Room Update:', newData);
                     // Check if players count changed
                     if (newData.players_count !== playerCount) {
                         setPlayerCount(newData.players_count);
