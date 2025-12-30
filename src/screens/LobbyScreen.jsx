@@ -5,7 +5,7 @@ import { useGame } from '../context/GameContext';
 import { Button } from '../components/Button';
 import { ArrowLeft, Copy, Users, User, QrCode, ScanLine } from 'lucide-react'; // Added icons
 import QRCode from "react-qr-code"; // Generator
-import { Html5QrcodeScanner } from "html5-qrcode"; // Scanner
+import { Html5Qrcode } from "html5-qrcode"; // Use the lower level API
 
 export const LobbyScreen = () => {
     const { createRoom, joinRoom, roomCode, isHost, playerCount, error, updateOnlineGame } = useOnline();
@@ -58,23 +58,32 @@ export const LobbyScreen = () => {
     };
 
     useEffect(() => {
+        let html5QrCode;
         if (showScanner) {
-            const scanner = new Html5QrcodeScanner(
-                "reader",
-                { fps: 10, qrbox: { width: 250, height: 250 } },
-                false // verbose
-            );
-            scanner.render(
+            html5QrCode = new Html5Qrcode("reader");
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                config,
                 (decodedText) => {
-                    scanner.clear();
-                    setShowScanner(false);
-                    setInputCode(decodedText.trim().toUpperCase());
+                    html5QrCode.stop().then(() => {
+                        setShowScanner(false);
+                        setInputCode(decodedText.trim().toUpperCase());
+                    }).catch(err => console.error(err));
                 },
-                (error) => {
-                    // console.warn(error);
+                (errorMessage) => {
+                    // console.log(errorMessage);
                 }
-            );
-            return () => scanner.clear();
+            ).catch((err) => {
+                console.error("Erro ao iniciar câmera", err);
+            });
+
+            return () => {
+                if (html5QrCode && html5QrCode.isScanning) {
+                    html5QrCode.stop().catch(err => console.error(err));
+                }
+            };
         }
     }, [showScanner]);
 
@@ -167,11 +176,24 @@ export const LobbyScreen = () => {
                         </div>
 
                         {showScanner ? (
-                            <div className="w-full bg-black/40 rounded-2xl overflow-hidden border border-white/20 p-2">
-                                <div id="reader" className="w-full rounded-xl overflow-hidden" />
-                                <Button variant="ghost" onClick={() => setShowScanner(false)} className="w-full mt-2 text-white/60">
-                                    Cancelar Câmera
-                                </Button>
+                            <div className="w-full bg-black/80 rounded-2xl overflow-hidden border border-white/20 p-2 relative">
+                                <div id="reader" className="w-full rounded-xl overflow-hidden aspect-square" />
+                                <div className="absolute inset-x-0 bottom-4 flex justify-center px-4">
+                                    <Button variant="outline" onClick={() => setShowScanner(false)} className="w-full bg-white/10 backdrop-blur-md border-white/20">
+                                        Cancelar
+                                    </Button>
+                                </div>
+                                <style>{`
+                                    #reader video {
+                                        width: 100% !important;
+                                        height: 100% !important;
+                                        object-fit: cover !important;
+                                        border-radius: 0.75rem;
+                                    }
+                                    #reader__scan_region {
+                                        background: transparent !important;
+                                    }
+                                `}</style>
                             </div>
                         ) : (
                             <Button variant="ghost" onClick={() => setShowScanner(true)} className="text-rose-200 text-sm flex items-center gap-2 mx-auto mb-2">
