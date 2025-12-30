@@ -3,7 +3,19 @@
 @tailwind utilities;
 
 @layer base {
+
+  html,
+  body,
+  #root {
+    height: 100dvh;
+    width: 100vw;
+    overflow: hidden;
+    position: fixed;
+  }
+
   body {
     @apply bg-brand-dark text-white font-sans;
+    -webkit-overflow-scrolling: touch;
+    touch-action: none;
   }
 }

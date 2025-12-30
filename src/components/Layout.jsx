@@ -2,8 +2,8 @@ import React from 'react';
 
 export const Layout = ({ children }) => {
     return (
-        <div className="min-h-screen w-full bg-gradient-to-br from-brand-dark via-[#3d0014] to-brand-primary flex flex-col items-center justify-center p-6 sm:p-8 overflow-hidden">
-            <div className="w-full max-w-md mx-auto flex flex-col h-full relative z-10">
+        <div className="h-dvh w-full bg-gradient-to-br from-brand-dark via-[#3d0014] to-brand-primary flex flex-col items-center justify-center p-4 sm:p-8 overflow-hidden touch-none">
+            <div className="w-full max-w-md mx-auto flex flex-col h-full max-h-full relative z-10 overflow-y-auto overflow-x-hidden pt-safe pb-safe px-2">
                 {children}
             </div>
 
