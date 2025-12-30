@@ -7,8 +7,20 @@ import { GameScreen } from './screens/GameScreen';
 import { EndScreen } from './screens/EndScreen';
 import { LobbyScreen } from './screens/LobbyScreen';
 
+import { ProfileScreen } from './screens/ProfileScreen';
+import { useUser } from './context/UserContext';
+
 function AppContent() {
     const { gameState } = useGame();
+    const { profile, loading } = useUser();
+
+    // While loading auth/profile, show blank or splash
+    if (loading) return null;
+
+    // Force profile setup if not completed
+    if (!profile?.setupComplete) {
+        return <Layout><ProfileScreen /></Layout>;
+    }
 
     return (
         <Layout>

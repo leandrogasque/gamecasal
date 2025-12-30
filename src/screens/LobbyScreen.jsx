@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useOnline } from '../context/OnlineContext';
 import { useGame } from '../context/GameContext';
 import { Button } from '../components/Button';
-import { ArrowLeft, Copy, Users, User, QrCode, ScanLine } from 'lucide-react'; // Added icons
+import { ArrowLeft, Copy, Users, User, QrCode, ScanLine, Settings } from 'lucide-react'; // Added icons
+import { useUser } from '../context/UserContext';
 import QRCode from "react-qr-code"; // Generator
 import { Html5Qrcode } from "html5-qrcode"; // Use the lower level API
 
@@ -11,9 +12,9 @@ export const LobbyScreen = () => {
     const { createRoom, joinRoom, roomCode, isHost, playerCount, error, updateOnlineGame } = useOnline();
     const { setGameState, playerNames, setPlayerNames } = useGame();
 
+    const { profile } = useUser();
     const [mode, setMode] = useState('menu'); // menu, create, join
     const [inputCode, setInputCode] = useState('');
-    const [myNickname, setMyNickname] = useState('');
     const [loading, setLoading] = useState(false);
     const [showScanner, setShowScanner] = useState(false); // Toggle scanner
 
@@ -25,9 +26,8 @@ export const LobbyScreen = () => {
     }, [playerCount, roomCode]);
 
     const handleCreate = async () => {
-        if (!myNickname) return alert('Digite seu nome!');
         setLoading(true);
-        setPlayerNames(prev => ({ ...prev, 1: myNickname }));
+        setPlayerNames(prev => ({ ...prev, 1: profile.nickname }));
         const code = await createRoom();
         if (code) {
             setMode('waiting');
@@ -37,9 +37,8 @@ export const LobbyScreen = () => {
 
     const handleJoin = async () => {
         if (inputCode.length !== 6) return;
-        if (!myNickname) return alert('Digite seu nome!');
         setLoading(true);
-        setPlayerNames(prev => ({ ...prev, 2: myNickname }));
+        setPlayerNames(prev => ({ ...prev, 2: profile.nickname }));
         const cleanCode = inputCode.trim().toUpperCase();
         const success = await joinRoom(cleanCode);
         if (success) {
@@ -89,20 +88,16 @@ export const LobbyScreen = () => {
 
     // Sync P2 Name when joined
     useEffect(() => {
-        if (!isHost && roomCode && mode === 'waiting' && myNickname) {
-            updateOnlineGame({ playerNames: { ...playerNames, 2: myNickname } });
+        if (!isHost && roomCode && mode === 'waiting' && profile?.nickname) {
+            updateOnlineGame({ playerNames: { ...playerNames, 2: profile.nickname } });
         }
-    }, [roomCode, mode, isHost, myNickname, playerNames, updateOnlineGame]);
+    }, [roomCode, mode, isHost, profile?.nickname, playerNames, updateOnlineGame]);
 
-    // Sync P1 Name when hosting (initial) - actually GameContext sync takes care if we update state locally first?
-    // SetupScreen updates local state. Here we updated local state too manually. 
-    // But Host creates initial room state in createRoom. We should pass the name there ideally.
-    // For now, let's use a delayed sync.
     useEffect(() => {
-        if (isHost && roomCode && mode === 'waiting' && myNickname) {
-            updateOnlineGame({ playerNames: { ...playerNames, 1: myNickname } });
+        if (isHost && roomCode && mode === 'waiting' && profile?.nickname) {
+            updateOnlineGame({ playerNames: { ...playerNames, 1: profile.nickname } });
         }
-    }, [roomCode, mode, isHost, myNickname, playerNames, updateOnlineGame]);
+    }, [roomCode, mode, isHost, profile?.nickname, playerNames, updateOnlineGame]);
 
     const copyCode = () => {
         navigator.clipboard.writeText(roomCode);
@@ -126,18 +121,19 @@ export const LobbyScreen = () => {
                         exit={{ opacity: 0, x: -50 }}
                         className="flex flex-col gap-4 w-full"
                     >
-                        <div className="relative w-full mb-2">
-                            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-rose-200" />
-                            <input
-                                type="text"
-                                placeholder="SEU APELIDO"
-                                className="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-rose-300"
-                                value={myNickname}
-                                onChange={(e) => setMyNickname(e.target.value)}
-                            />
+                        <div className="bg-white/10 p-4 rounded-2xl flex items-center justify-between border border-white/10 group mb-2">
+                            <div className="flex items-center gap-3">
+                                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${profile?.color || 'from-rose-500 to-pink-600'} flex items-center justify-center text-2xl shadow-lg ring-2 ring-white/20`}>
+                                    {profile?.avatar || '💖'}
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-[10px] uppercase tracking-widest text-rose-300 font-bold opacity-60">Perfil Ativo</p>
+                                    <p className="text-white font-medium text-lg leading-tight">{profile?.nickname}</p>
+                                </div>
+                            </div>
                         </div>
 
-                        <Button onClick={handleCreate} disabled={!myNickname} className="w-full">
+                        <Button onClick={handleCreate} className="w-full">
                             Criar Sala
                         </Button>
 
@@ -146,7 +142,7 @@ export const LobbyScreen = () => {
                                 Digitar Código
                             </Button>
                             <Button variant="secondary" onClick={() => {
-                                if (!myNickname) return alert('Digite seu apelido primeiro!');
+                                if (!profile?.nickname) return;
                                 setMode('join');
                                 setShowScanner(true);
                             }} className="flex-1 flex items-center justify-center gap-2">
@@ -164,15 +160,16 @@ export const LobbyScreen = () => {
                         exit={{ opacity: 0, x: -50 }}
                         className="flex flex-col gap-4 w-full"
                     >
-                        <div className="relative w-full mb-2">
-                            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-rose-200" />
-                            <input
-                                type="text"
-                                placeholder="SEU APELIDO"
-                                className="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-rose-300"
-                                value={myNickname}
-                                onChange={(e) => setMyNickname(e.target.value)}
-                            />
+                        <div className="bg-white/10 p-4 rounded-2xl flex items-center justify-between border border-white/10 group mb-2">
+                            <div className="flex items-center gap-3">
+                                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${profile?.color || 'from-rose-500 to-pink-600'} flex items-center justify-center text-2xl shadow-lg ring-2 ring-white/20`}>
+                                    {profile?.avatar || '💖'}
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-[10px] uppercase tracking-widest text-rose-300 font-bold opacity-60">Perfil Ativo</p>
+                                    <p className="text-white font-medium text-lg leading-tight">{profile?.nickname}</p>
+                                </div>
+                            </div>
                         </div>
 
                         {showScanner ? (
@@ -213,7 +210,7 @@ export const LobbyScreen = () => {
                             />
                         )}
                         {error && <p className="text-red-400 text-sm">{error}</p>}
-                        <Button onClick={handleJoin} disabled={loading || inputCode.length < 6 || !myNickname} className="w-full">
+                        <Button onClick={handleJoin} disabled={loading || inputCode.length < 6 || !profile?.nickname} className="w-full">
                             {loading ? 'Entrando...' : 'Conectar'}
                         </Button>
                     </motion.div>

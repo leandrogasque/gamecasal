@@ -9,18 +9,22 @@ import './index.css'
 
 import { ErrorBoundary } from './components/ErrorBoundary'
 
+import { UserProvider } from './context/UserContext'
+
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <ErrorBoundary>
-            <OnlineProvider>
-                <GameProvider>
-                    <SoundProvider>
-                        <ReactionProvider>
-                            <App />
-                        </ReactionProvider>
-                    </SoundProvider>
-                </GameProvider>
-            </OnlineProvider>
+            <UserProvider>
+                <OnlineProvider>
+                    <GameProvider>
+                        <SoundProvider>
+                            <ReactionProvider>
+                                <App />
+                            </ReactionProvider>
+                        </SoundProvider>
+                    </GameProvider>
+                </OnlineProvider>
+            </UserProvider>
         </ErrorBoundary>
     </React.StrictMode>,
 )
