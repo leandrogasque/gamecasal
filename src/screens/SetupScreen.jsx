@@ -68,17 +68,25 @@ export const SetupScreen = () => {
                     <div className="flex gap-4">
                         <input
                             type="text"
-                            placeholder="Nome dele(a)"
-                            className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-rose-300 transition-colors"
+                            placeholder="Jogador 1"
+                            className={cn(
+                                "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-rose-300 transition-colors",
+                                roomCode && "opacity-50 cursor-not-allowed"
+                            )}
                             value={playerNames[1]}
-                            onChange={(e) => setPlayerNames(prev => ({ ...prev, 1: e.target.value }))}
+                            onChange={(e) => !roomCode && setPlayerNames(prev => ({ ...prev, 1: e.target.value }))}
+                            readOnly={!!roomCode}
                         />
                         <input
                             type="text"
-                            placeholder="Nome dele(a)"
-                            className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-rose-300 transition-colors"
+                            placeholder="Jogador 2"
+                            className={cn(
+                                "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-rose-300 transition-colors",
+                                roomCode && "opacity-50 cursor-not-allowed"
+                            )}
                             value={playerNames[2]}
-                            onChange={(e) => setPlayerNames(prev => ({ ...prev, 2: e.target.value }))}
+                            onChange={(e) => !roomCode && setPlayerNames(prev => ({ ...prev, 2: e.target.value }))}
+                            readOnly={!!roomCode}
                         />
                     </div>
                 </div>

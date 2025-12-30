@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import questionsData from '../data/questions.json';
 import { useOnline } from './OnlineContext';
+import { useUser } from './UserContext';
 import { endContent } from '../data/endContent';
 
 const GameContext = createContext();
@@ -9,6 +10,7 @@ export const useGame = () => useContext(GameContext);
 
 export const GameProvider = ({ children }) => {
     const { onlineState, updateOnlineGame, roomCode, isHost } = useOnline(); // Hook into online data
+    const { profile } = useUser();
 
     const [gameState, setGameState] = useState('home'); // home, lobby, setup, playing, finished
     const [deck, setDeck] = useState([]);
@@ -22,6 +24,13 @@ export const GameProvider = ({ children }) => {
         randomize: true
     });
     const [playerNames, setPlayerNames] = useState({ 1: 'Jogador 1', 2: 'Jogador 2' });
+
+    // Update P1 name when profile loads
+    useEffect(() => {
+        if (profile?.nickname && playerNames[1] === 'Jogador 1') {
+            setPlayerNames(prev => ({ ...prev, 1: profile.nickname }));
+        }
+    }, [profile, playerNames]);
     const [endQuoteIndex, setEndQuoteIndex] = useState(0);
     const [endChallengeIndex, setEndChallengeIndex] = useState(0);
 
